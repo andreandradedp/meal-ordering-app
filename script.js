@@ -41,6 +41,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (name && nif && phone) {
             const orderNumber = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
             orderNumberDiv.textContent = `Registo feito com sucesso! Registo número: ${orderNumber}`;
+
+            const orderData = [name, nif, phone, orderNumber];
+            appendDataToSheet(orderData);
         }
     });
+
+    function initClient() {
+        gapi.client.init({
+            'apiKey': '32bd2ffd2b68bbc88d6f7b3f0c397b0b9c303f35',
+            'clientId': '116340806262505250735',
+            'scope': 'https://www.googleapis.com/auth/spreadsheets',
+            'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+        }).then(() => {
+            console.log('GAPI client initialized.');
+        });
+    }
+
+    gapi.load('client:auth2', initClient);
+
+    function appendDataToSheet(data) {
+        const params = {
+            spreadsheetId: '1AeASFf0VmvmtySqHXVDxJEZB6IkuwvdpqdcPgcb1Ruw',
+            range: 'Sheet1!A1',
+            valueInputOption: 'RAW',
+            insertDataOption: 'INSERT_ROWS',
+        };
+
+        const valueRangeBody = {
+            'values': [data]
+        };
+
+        gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then((response) => {
+            console.log(response.result);
+        });
+    }
 });
+
