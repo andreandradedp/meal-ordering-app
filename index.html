@@ -1,53 +1,71 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registo de Refeições</title>
+    <meta name="description" content="Formulário para registro de pedidos de refeições">
+    <title>Registro de Refeições</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Faça aqui o registo do seu pedido</h1>
+        <h1>Faça aqui o registro do seu pedido</h1>
     </header>
     <main>
         <form id="orderForm">
-            <label for="date">Data:</label>
-            <input type="date" id="date" name="date" required>
+            <div class="form-group">
+                <label for="date">Data:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
             
-            <label for="item">Item:</label>
-            <select id="item" name="item" required>
-                <option value="Take Away Colaborador">Take Away Colaborador - 3€</option>
-                <option value="Sopa">Sopa - 1.5€</option>
-                <option value="Sopa mensal">Sopa mensal - 22€</option>
-                <option value="Refeição externo">Refeição externo - 5€</option>
-            </select>
+            <div class="form-group">
+                <label for="item">Item:</label>
+                <select id="item" name="item" required>
+                    <option value="">Clique aqui para escolher a refeição</option>
+                    <option value="Take Away Colaborador">Take Away Colaborador - 3€</option>
+                    <option value="Sopa">Sopa - 1.5€</option>
+                    <option value="Sopa mensal">Sopa mensal - 22€</option>
+                    <option value="Refeição externo">Refeição externo - 5€</option>
+                </select>
+            </div>
             
-            <label for="quantity">Quantidade:</label>
-            <input type="number" id="quantity" name="quantity" min="1" max="99" required>
+            <div class="form-group">
+                <label for="quantity">Quantidade:</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="99" required>
+            </div>
             
-            <label for="price">Preço €:</label>
-            <input type="text" id="price" name="price" readonly>
+            <div class="form-group">
+                <label for="price">Preço €:</label>
+                <input type="text" id="price" name="price" readonly>
+            </div>
             
-            <button type="button" id="addItem">ADICIONAR</button>
+            <button type="button" id="addItem">Adicionar</button>
         </form>
         
         <ul id="orderList"></ul>
+        <div id="totalAmount"></div>
         
         <form id="customerForm">
-            <label for="name">Nome:</label>
-            <input type="text" id="name" name="name" maxlength="50" required>
+            <div class="form-group">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" maxlength="50" required>
+            </div>
             
-            <label for="nif">NIF:</label>
-            <input type="number" id="nif" name="nif" maxlength="9" required>
+            <div class="form-group">
+                <label for="nif">NIF:</label>
+                <input type="text" id="nif" name="nif" pattern="\d{9}" maxlength="9" required>
+            </div>
             
-            <label for="phone">Telefone:</label>
-            <input type="number" id="phone" name="phone" maxlength="9" required>
+            <div class="form-group">
+                <label for="phone">Telefone:</label>
+                <input type="tel" id="phone" name="phone" pattern="\d{9}" maxlength="9" required>
+            </div>
             
-            <button type="button" id="registerOrder">REGISTAR</button>
+            <button type="submit" id="registerOrder">Registrar</button>
         </form>
         
-        <div id="orderNumber"></div>
+        <div id="errorMessage" class="error-message"></div>
+        <div id="orderNumber" aria-live="polite"></div>
     </main>
     <script src="script.js"></script>
 </body>
