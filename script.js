@@ -140,8 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializa o cliente GAPI
     function initClient() {
         gapi.client.init({
-            'apiKey': 'COLOCAR NOVAMENTE A API KEY AQUI',
-            'clientId': 'COLOCAR NOVAMENTE O MEU CLIENT ID',
+            'apiKey': process.env.GOOGLE_API_KEY,
+            'clientId': process.env.GOOGLE_CLIENT_ID,
             'scope': 'https://www.googleapis.com/auth/spreadsheets',
             'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
         }).then(() => {
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adiciona os dados do pedido à planilha do Google
     function appendDataToSheet(data) {
         const params = {
-            spreadsheetId: 'COLOCAR NOVAMENTE O ID DA PLANILHA DO GOOGLE',
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
             range: 'Sheet1!A1',
             valueInputOption: 'RAW',
             insertDataOption: 'INSERT_ROWS',
@@ -175,4 +175,3 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 });
-
