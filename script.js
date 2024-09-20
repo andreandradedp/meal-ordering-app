@@ -172,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error appending data:', error);
+                showErrorMessage('Erro ao adicionar dados à planilha: ' + error.message);
             });
     }
 });
