@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const orderData = [sequentialNumber, registrationNumber, date, name, nif, phone, totalAmount.toFixed(2)];
         
         // Envia dados para o Google Apps Script
-        fetch('URL_DO_SEU_GOOGLE_APPS_SCRIPT', {
+        fetch('https://script.google.com/macros/s/AKfycbx9_UlHgrW7COti42YIFLtDOW-2vhdObVoWpGtEtXyqx4hSDsaoYLSQ75a0RZxADgk/exec', {
             method: 'POST',
             mode: 'no-cors', // Necessário para evitar problemas de CORS
             headers: {
