@@ -20,30 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderNumberDiv = document.getElementById('orderNumber');
     const errorMessageDiv = document.getElementById('errorMessage');
 
-    // Variáveis para controle do total e número sequencial
+    // Variável para controle do total
     let totalAmount = 0;
-    let lastSequentialNumber = 0;
 
-    // Função para obter o último número sequencial
-    function getLastSequentialNumber() {
-        const storedNumber = localStorage.getItem('lastSequentialNumber');
-        return storedNumber ? parseInt(storedNumber) : 0;
-    }
-
-    // Função para salvar o último número sequencial
-    function saveLastSequentialNumber(number) {
-        localStorage.setItem('lastSequentialNumber', number.toString());
-    }
-
-    // Inicializa o último número sequencial
-    lastSequentialNumber = getLastSequentialNumber();
-
-    // Função para formatar a data como DD/MM/YYYY
+    // Função para formatar a data como YYYY-MM-DD (formato aceito pelo input type="date")
     function formatDate(date) {
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
+        return date.toISOString().split('T')[0];
     }
 
     // Preenche o campo de data com a data atual
@@ -107,12 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const phone = document.getElementById('phone').value;
         const date = document.getElementById('date').value;
 
-        lastSequentialNumber++;
-        saveLastSequentialNumber(lastSequentialNumber);
-        const sequentialNumber = lastSequentialNumber.toString().padStart(6, '0');
-        const registrationNumber = generateRegistrationNumber(date, nif, phone, sequentialNumber);
-
-        const orderData = [sequentialNumber, registrationNumber, date, name, nif, phone, totalAmount.toFixed(2)];
+        const orderData = [date, name, nif, phone, totalAmount.toFixed(2)];
         
         // Envia dados para o Google Apps Script
         fetch('https://script.google.com/macros/s/AKfycbx9_UlHgrW7COti42YIFLtDOW-2vhdObVoWpGtEtXyqx4hSDsaoYLSQ75a0RZxADgk/exec', {
@@ -121,10 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ orderData: orderData }),
+            body: JSON.stringify({ 
+                orderData: orderData,
+                date: date,
+                nif: nif,
+                phone: phone
+            }),
         })
         .then(() => {
-            orderNumberDiv.textContent = `Registro feito com sucesso! Número de registro: ${registrationNumber}`;
+            orderNumberDiv.textContent = `Registro feito com sucesso! O número de registro será gerado no servidor.`;
             customerForm.reset();
             orderList.innerHTML = '';
             totalAmount = 0;
@@ -137,15 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao registrar pedido:', error);
             showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente.');
         });
-    }
-
-    // Gera o número de registro
-    function generateRegistrationNumber(date, nif, phone, sequentialNumber) {
-        const datePart = date.split('/')[0]; // Pega os dois primeiros dígitos do dia
-        const nifPart = nif.slice(-2);
-        const phonePart = phone.slice(-2);
-        const sequentialPart = sequentialNumber.slice(-3);
-        return `${datePart}${nifPart}${phonePart}${sequentialPart}`;
     }
 
     // Valida os campos obrigatórios do formulário
