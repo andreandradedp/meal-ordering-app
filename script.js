@@ -1,6 +1,6 @@
-// Espera que o DOM (estrutura da página) esteja completamente carregado antes de executar o script
+// Espera que o DOM esteja completamente carregado antes de executar o script
 document.addEventListener('DOMContentLoaded', () => {
-    // Objeto com os preços dos itens disponíveis
+    // Objeto com os preços dos itens
     const itemPrices = {
         "Take Away Colaborador": 3,
         "Sopa": 1.5,
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Refeição externo": 5
     };
 
-    // Seleção dos elementos do DOM que serão manipulados
+    // Seleção dos elementos do DOM
     const orderForm = document.getElementById('orderForm');
     const itemSelect = document.getElementById('item');
     const quantityInput = document.getElementById('quantity');
@@ -20,30 +20,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderNumberDiv = document.getElementById('orderNumber');
     const errorMessageDiv = document.getElementById('errorMessage');
 
-    // Variáveis para controle do total do pedido e número sequencial
+    // Variáveis para controle do total e número sequencial
     let totalAmount = 0;
     let lastSequentialNumber = 0;
 
-    // Adiciona eventos aos elementos
+    // Função para obter o último número sequencial
+    function getLastSequentialNumber() {
+        const storedNumber = localStorage.getItem('lastSequentialNumber');
+        return storedNumber ? parseInt(storedNumber) : 0;
+    }
+
+    // Função para salvar o último número sequencial
+    function saveLastSequentialNumber(number) {
+        localStorage.setItem('lastSequentialNumber', number.toString());
+    }
+
+    // Inicializa o último número sequencial
+    lastSequentialNumber = getLastSequentialNumber();
+
+    // Função para formatar a data como DD/MM/YYYY
+    function formatDate(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    // Preenche o campo de data com a data atual
+    const dateInput = document.getElementById('date');
+    dateInput.value = formatDate(new Date());
+
+    // Adiciona event listeners aos elementos
     itemSelect.addEventListener('change', updatePrice);
     addItemButton.addEventListener('click', addItemToOrder);
     customerForm.addEventListener('submit', registerOrder);
 
-    // Função para atualizar o preço quando um item é selecionado
+    // Atualiza o preço quando um item é selecionado
     function updatePrice() {
         const selectedItem = itemSelect.value;
         priceInput.value = itemPrices[selectedItem] || '';
     }
 
-    // Função para adicionar um item ao pedido
+    // Adiciona um item ao pedido
     function addItemToOrder(event) {
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault();
         if (!validateForm(orderForm)) {
             showErrorMessage('Por favor, preencha todos os campos obrigatórios.');
             return;
         }
 
-        // Obtém os valores do item selecionado
         const item = itemSelect.value;
         const quantity = parseInt(quantityInput.value);
         const price = parseFloat(priceInput.value);
@@ -64,51 +89,49 @@ document.addEventListener('DOMContentLoaded', () => {
         clearErrorMessage();
     }
 
-    // Função para atualizar o total exibido
+    // Atualiza o total exibido
     function updateTotalAmount() {
         totalAmountDiv.textContent = `Total: ${totalAmount.toFixed(2)}€`;
     }
 
-    // Função para registrar o pedido
+    // Registra o pedido
     function registerOrder(event) {
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault();
         if (!validateForm(customerForm) || orderList.children.length === 0) {
             showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
             return;
         }
 
-        // Obtém os dados do cliente
         const name = document.getElementById('name').value;
         const nif = document.getElementById('nif').value;
         const phone = document.getElementById('phone').value;
         const date = document.getElementById('date').value;
 
-        // Gera os números de registro
         lastSequentialNumber++;
+        saveLastSequentialNumber(lastSequentialNumber);
         const sequentialNumber = lastSequentialNumber.toString().padStart(6, '0');
         const registrationNumber = generateRegistrationNumber(date, nif, phone, sequentialNumber);
 
-        // Prepara os dados para enviar à planilha
         const orderData = [sequentialNumber, registrationNumber, date, name, nif, phone, totalAmount.toFixed(2)];
         
         // Envia dados para o Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbx9_UlHgrW7COti42YIFLtDOW-2vhdObVoWpGtEtXyqx4hSDsaoYLSQ75a0RZxADgk/exec', {
+        fetch('URL_DO_SEU_GOOGLE_APPS_SCRIPT', {
             method: 'POST',
-            mode: 'no-cors', // Necessário para evitar problemas de CORS
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ orderData: orderData }),
         })
         .then(() => {
-            // Exibe mensagem de sucesso
             orderNumberDiv.textContent = `Registro feito com sucesso! Número de registro: ${registrationNumber}`;
-            // Limpa o formulário e reseta o pedido
             customerForm.reset();
             orderList.innerHTML = '';
             totalAmount = 0;
             updateTotalAmount();
             clearErrorMessage();
+            // Redefine a data para a data atual após o reset do formulário
+            dateInput.value = formatDate(new Date());
         })
         .catch(error => {
             console.error('Erro ao registrar pedido:', error);
@@ -116,16 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Função para gerar o número de registro
+    // Gera o número de registro
     function generateRegistrationNumber(date, nif, phone, sequentialNumber) {
-        const datePart = date.slice(-2);
+        const datePart = date.split('/')[0]; // Pega os dois primeiros dígitos do dia
         const nifPart = nif.slice(-2);
         const phonePart = phone.slice(-2);
         const sequentialPart = sequentialNumber.slice(-3);
         return `${datePart}${nifPart}${phonePart}${sequentialPart}`;
     }
 
-    // Função para validar os campos obrigatórios do formulário
+    // Valida os campos obrigatórios do formulário
     function validateForm(form) {
         let isValid = true;
         form.querySelectorAll('[required]').forEach(input => {
@@ -139,13 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return isValid;
     }
 
-    // Função para exibir mensagem de erro
+    // Exibe uma mensagem de erro
     function showErrorMessage(message) {
         errorMessageDiv.textContent = message;
     }
 
-    // Função para limpar mensagem de erro
+    // Limpa a mensagem de erro
     function clearErrorMessage() {
         errorMessageDiv.textContent = '';
     }
 });
+
