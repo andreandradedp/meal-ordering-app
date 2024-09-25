@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             total: totalAmount.toFixed(2)
         };
         
+        // Envia dados para o Google Apps Script
         fetch('https://script.google.com/macros/s/AKfycbwEUCn0EMw5hjYUZnxfE7hhLH5VmskMez3YbfvEya4/dev', {
             method: 'POST',
             headers: {
@@ -124,12 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(orderData),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Resposta da rede não foi ok');
-            }
-            return response.text();
-        })
+        .then(response => response.text())
         .then(text => {
             try {
                 return JSON.parse(text);
@@ -140,7 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             if (data.result === 'success') {
+                // Exibe mensagem de sucesso com o número de registro
                 orderNumberDiv.textContent = `Registro feito com sucesso! Número de registro: ${data.registrationNumber}`;
+                // Reseta o formulário e limpa a lista de itens
                 customerForm.reset();
                 orderList.innerHTML = '';
                 totalAmount = 0;
