@@ -117,6 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
             total: totalAmount.toFixed(2)
         };
         
+        // Exibe mensagem de "Processando..." para o usuário
+        showProcessingMessage('Processando seu pedido...');
+
         // Envia dados para o Google Apps Script
         fetch('https://script.google.com/macros/s/AKfycbwEUCn0EMw5hjYUZnxfE7hhLH5VmskMez3YbfvEya4/dev', {
             method: 'POST',
@@ -125,20 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(orderData),
         })
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro de rede: ${response.status} - ${response.statusText}`);
+            }
+            return response.text();
+        })
         .then(text => {
             try {
                 return JSON.parse(text);
             } catch (error) {
                 console.error('Erro ao analisar resposta:', error);
-                throw new Error('Erro ao processar resposta do servidor');
+                throw new Error(`Erro ao processar resposta do servidor: ${text}`);
             }
         })
         .then(data => {
             if (data.result === 'success') {
-                // Exibe mensagem de sucesso com o número de registro
                 orderNumberDiv.textContent = `Registro feito com sucesso! Número de registro: ${data.registrationNumber}`;
-                // Reseta o formulário e limpa a lista de itens
                 customerForm.reset();
                 orderList.innerHTML = '';
                 totalAmount = 0;
@@ -151,7 +157,11 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Erro ao registrar pedido:', error);
-            showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente.');
+            showErrorMessage(`Erro ao registrar pedido: ${error.message}. Por favor, tente novamente.`);
+        })
+        .finally(() => {
+            // Remove a mensagem de "Processando..."
+            clearProcessingMessage();
         });
     }
 
@@ -172,10 +182,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Exibe uma mensagem de erro
     function showErrorMessage(message) {
         errorMessageDiv.textContent = message;
+        errorMessageDiv.style.color = 'red';
     }
 
-    // Limpa a mensagem de erro
+    // Exibe uma mensagem de processamento
+    function showProcessingMessage(message) {
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.style.color = 'blue';
+    }
+
+    // Limpa a mensagem de erro ou processamento
     function clearErrorMessage() {
         errorMessageDiv.textContent = '';
+    }
+
+    // Limpa especificamente a mensagem de processamento
+    function clearProcessingMessage() {
+        if (errorMessageDiv.style.color === 'blue') {
+            errorMessageDiv.textContent = '';
+        }
     }
 });
