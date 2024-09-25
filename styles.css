@@ -1,132 +1,92 @@
-:root {
-    --primary-color: #4CAF50;
-    --primary-hover-color: #45a049;
-    --background-color: #f4f4f4;
-    --text-color: #333;
-    --border-color: #ccc;
-    --success-color: #28a745;
-    --error-color: #dc3545;
-    --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
+/* Estilos gerais */
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    font-family: Arial, sans-serif;
     line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
 }
 
-header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 1em;
-    text-align: center;
-    width: 100%;
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-main {
-    background-color: white;
-    padding: 2em;
-    margin: 2em;
-    border-radius: 8px;
-    box-shadow: var(--box-shadow);
-    width: 90%;
-    max-width: 600px;
+/* Cabeçalhos */
+h1, h2 {
+    color: #77A36C;
 }
 
+/* Formulários */
 form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1.5em;
-}
-
-.form-group {
-    margin-bottom: 1em;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 0.5em;
-    font-weight: bold;
+    margin-top: 10px;
 }
 
-input, select, button {
+input, select {
     width: 100%;
-    padding: 0.75em;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 1em;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
 }
 
-input:focus, select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-}
-
+/* Botões */
 button {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: #77A36C;
+    color: #fff;
+    padding: 10px 15px;
     border: none;
+    border-radius: 3px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 button:hover {
-    background-color: var(--primary-hover-color);
+    background-color: #5b8054;
 }
 
+/* Lista de itens do pedido */
 #orderList {
     list-style-type: none;
     padding: 0;
-    margin-bottom: 1.5em;
 }
 
 #orderList li {
-    padding: 0.75em;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 3px;
 }
 
-#orderNumber {
-    margin-top: 1em;
-    font-weight: bold;
-    color: var(--success-color);
-    text-align: center;
-    padding: 1em;
-    background-color: #e8f5e9;
-    border-radius: 4px;
-}
-
-.error {
-    border-color: var(--error-color) !important;
-}
-
-.error-message {
-    color: var(--error-color);
-    margin-top: 1em;
-    text-align: center;
-    font-weight: bold;
-}
-
+/* Total do pedido */
 #totalAmount {
     font-weight: bold;
-    margin-top: 1em;
-    text-align: right;
-    font-size: 1.2em;
-    color: var(--primary-color);
+    margin-top: 10px;
 }
 
-@media (max-width: 768px) {
-    main {
-        width: 95%;
-        padding: 1.5em;
-        margin: 1em;
-    }
+/* Mensagens de erro */
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+/* Número do pedido */
+.order-number {
+    font-weight: bold;
+    color: #77A36C;
+    margin-top: 10px;
+}
+
+/* Campos com erro */
+.error {
+    border-color: red;
 }
