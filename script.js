@@ -19,128 +19,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const customerForm = document.getElementById('customerForm');
     const orderNumberDiv = document.getElementById('orderNumber');
     const errorMessageDiv = document.getElementById('errorMessage');
+    const nifInput = document.getElementById('nif');
+    const phoneInput = document.getElementById('phone');
 
     // Variável para controle do total
     let totalAmount = 0;
 
-    // Função para formatar a data como YYYY-MM-DD (formato aceito pelo input type="date")
+    // Função para formatar a data como DD/MM/YYYY
     function formatDate(date) {
-        return date.toISOString().split('T')[0];
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
     }
 
     // Preenche o campo de data com a data atual
     const dateInput = document.getElementById('date');
-    dateInput.value = formatDate(new Date());
+    dateInput.value = new Date().toISOString().split('T')[0];
 
     // Adiciona event listeners aos elementos
     itemSelect.addEventListener('change', updatePrice);
     addItemButton.addEventListener('click', addItemToOrder);
     customerForm.addEventListener('submit', registerOrder);
 
-    // Atualiza o preço quando um item é selecionado
-    function updatePrice() {
-        const selectedItem = itemSelect.value;
-        priceInput.value = itemPrices[selectedItem] || '';
-    }
-
-    // Adiciona um item ao pedido
-    function addItemToOrder(event) {
-        event.preventDefault();
-        if (!validateForm(orderForm)) {
-            showErrorMessage('Por favor, preencha todos os campos obrigatórios.');
-            return;
+    // Validação do NIF
+    nifInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
+        if (this.value.length === 9 && !isValidNIF(this.value)) {
+            this.setCustomValidity('NIF inválido');
+        } else {
+            this.setCustomValidity('');
         }
+    });
 
-        const item = itemSelect.value;
-        const quantity = parseInt(quantityInput.value);
-        const price = parseFloat(priceInput.value);
+    // Validação do telefone
+    phoneInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
+    });
 
-        // Cria um novo item na lista de pedidos
-        const listItem = document.createElement('li');
-        const itemTotal = quantity * price;
-        listItem.textContent = `${item} - ${quantity} x ${price.toFixed(2)}€ = ${itemTotal.toFixed(2)}€`;
-        orderList.appendChild(listItem);
-
-        // Atualiza o total do pedido
-        totalAmount += itemTotal;
-        updateTotalAmount();
-
-        // Limpa o formulário e mensagens de erro
-        orderForm.reset();
-        updatePrice();
-        clearErrorMessage();
-    }
-
-    // Atualiza o total exibido
-    function updateTotalAmount() {
-        totalAmountDiv.textContent = `Total: ${totalAmount.toFixed(2)}€`;
-    }
-
-    // Registra o pedido
-    function registerOrder(event) {
-        event.preventDefault();
-        if (!validateForm(customerForm) || orderList.children.length === 0) {
-            showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
-            return;
-        }
-
-        const name = document.getElementById('name').value;
-        const nif = document.getElementById('nif').value;
-        const phone = document.getElementById('phone').value;
-        const date = document.getElementById('date').value;
-
-        const orderData = [date, name, nif, phone, totalAmount.toFixed(2)];
-        
-        fetch('https://script.google.com/macros/s/AKfycbx9_UlHgrW7COti42YIFLtDOW-2vhdObVoWpGtEtXyqx4hSDsaoYLSQ75a0RZxADgk/exec', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                orderData: orderData,
-                date: date,
-                nif: nif,
-                phone: phone
-            }),
-        })
-        .then(() => {
-            orderNumberDiv.textContent = `Registro feito com sucesso! O número de registro será gerado no servidor.`;
-            customerForm.reset();
-            orderList.innerHTML = '';
-            totalAmount = 0;
-            updateTotalAmount();
-            clearErrorMessage();
-            dateInput.value = formatDate(new Date());
-        })
-        .catch(error => {
-            console.error('Erro ao registrar pedido:', error);
-            showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente.');
-        });
-    }
-
-    // Valida os campos obrigatórios do formulário
-    function validateForm(form) {
-        let isValid = true;
-        form.querySelectorAll('[required]').forEach(input => {
-            if (!input.value) {
-                input.classList.add('error');
-                isValid = false;
-            } else {
-                input.classList.remove('error');
-            }
-        });
-        return isValid;
-    }
-
-    // Exibe uma mensagem de erro
-    function showErrorMessage(message) {
-        errorMessageDiv.textContent = message;
-    }
-
-    // Limpa a mensagem de erro
-    function clearErrorMessage() {
-        errorMessageDiv.textContent = '';
-    }
-});
-
+    // Função para validar NIF
+    function isValidNIF(nif) {
+        if (nif.length !== 9 || /^(\d)\1{8}$/.test(nif) || nif === '123
