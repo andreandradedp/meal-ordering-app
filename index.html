@@ -10,49 +10,86 @@
     <div class="container">
         <h1>Sistema de Pedidos de Refeições</h1>
         
+        <!-- Menu de Preços -->
+        <div class="price-menu">
+            <div class="price-item">
+                <h3>Refeições para externos</h3>
+                <div class="price">5€</div>
+                <div class="description">Co-work, recibos verdes, etc.</div>
+            </div>
+            <div class="price-item">
+                <h3>Pacote mensal de sopas</h3>
+                <div class="price">22€</div>
+                <div class="description">Para colaboradores</div>
+            </div>
+            <div class="price-item">
+                <h3>Sopas Take Away</h3>
+                <div class="price">1.5€</div>
+                <div class="description">Para colaboradores</div>
+            </div>
+            <div class="price-item">
+                <h3>Refeições Take Away</h3>
+                <div class="price">3€</div>
+                <div class="description">Para colaboradores</div>
+            </div>
+        </div>
+        
         <!-- Formulário de Pedido -->
-        <form id="orderForm">
+        <div class="card">
             <h2>Adicionar Item ao Pedido</h2>
-            <label for="item">Item:</label>
-            <select id="item" required>
-                <option value="">Selecione um item</option>
-                <option value="Take Away Colaborador">Take Away Colaborador</option>
-                <option value="Sopa">Sopa</option>
-                <option value="Sopa mensal">Sopa mensal</option>
-                <option value="Refeição externo">Refeição externo</option>
-            </select>
-            
-            <label for="quantity">Quantidade:</label>
-            <input type="number" id="quantity" min="1" required>
-            
-            <label for="price">Preço:</label>
-            <input type="number" id="price" step="0.01" readonly>
-            
-            <button type="submit" id="addItem">Adicionar ao Pedido</button>
-        </form>
+            <form id="orderForm">
+                <div>
+                    <label for="item">Item:</label>
+                    <select id="item" required>
+                        <option value="">Selecione um item</option>
+                        <option value="Take Away Colaborador">Take Away Colaborador</option>
+                        <option value="Sopa">Sopa</option>
+                        <option value="Sopa mensal">Sopa mensal</option>
+                        <option value="Refeição externo">Refeição externo</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="quantity">Quantidade:</label>
+                    <input type="number" id="quantity" min="1" required>
+                </div>
+                <div>
+                    <label for="price">Preço:</label>
+                    <input type="number" id="price" step="0.01" readonly>
+                </div>
+                <button type="submit" id="addItem">Adicionar ao Pedido</button>
+            </form>
+        </div>
         
         <!-- Lista de Itens do Pedido -->
-        <h2>Itens do Pedido</h2>
-        <ul id="orderList"></ul>
-        <div id="totalAmount"></div>
+        <div class="card">
+            <h2>Itens do Pedido</h2>
+            <ul id="orderList"></ul>
+            <div id="totalAmount"></div>
+        </div>
         
         <!-- Formulário de Cliente -->
-        <form id="customerForm">
+        <div class="card">
             <h2>Informações do Cliente</h2>
-            <label for="name">Nome:</label>
-            <input type="text" id="name" required>
-            
-            <label for="nif">NIF:</label>
-            <input type="text" id="nif" required>
-            
-            <label for="phone">Telefone:</label>
-            <input type="tel" id="phone" required>
-            
-            <label for="date">Data:</label>
-            <input type="date" id="date" required>
-            
-            <button type="submit" id="registerOrder">Registrar Pedido</button>
-        </form>
+            <form id="customerForm">
+                <div>
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div>
+                    <label for="nif">NIF:</label>
+                    <input type="text" id="nif" required>
+                </div>
+                <div>
+                    <label for="phone">Telefone:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div>
+                    <label for="date">Data:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <button type="submit" id="registerOrder">Registrar Pedido</button>
+            </form>
+        </div>
         
         <!-- Mensagens de Erro e Número do Pedido -->
         <div id="errorMessage" class="error-message"></div>
@@ -60,7 +97,7 @@
     </div>
 
     <!-- Rodapé -->
-    <footer style="text-align: center; font-size: 9px; margin-top: 20px;">
+    <footer>
         Feito com 🥰 por @andre_depaula e @claudeAI
     </footer>
 
