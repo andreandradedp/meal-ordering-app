@@ -77,11 +77,11 @@
                 </div>
                 <div>
                     <label for="nif">NIF:</label>
-                    <input type="text" id="nif" required>
+                    <input type="text" id="nif" required pattern="\d{9}" maxlength="9" title="O NIF deve conter 9 dígitos">
                 </div>
                 <div>
                     <label for="phone">Telefone:</label>
-                    <input type="tel" id="phone" required>
+                    <input type="tel" id="phone" required pattern="\d{9}" maxlength="9" title="O telefone deve conter 9 dígitos">
                 </div>
                 <div>
                     <label for="date">Data:</label>
@@ -98,7 +98,7 @@
 
     <!-- Rodapé -->
     <footer>
-        Feito com 🥰 por @andre_depaula e @claudeAI
+        Desenvolvido com 🧡 por @andre_depaula 💻.
     </footer>
 
     <script src="script.js"></script>
