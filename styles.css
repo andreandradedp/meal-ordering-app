@@ -1,92 +1,180 @@
 /* Estilos gerais */
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
+:root {
+    --primary-color: #77A36C;
+    --secondary-color: #5b8054;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --card-background: #fff;
+}
+
+* {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
     padding: 20px;
-    background-color: #f4f4f4;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
-    background-color: #fff;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Cabeçalhos */
 h1, h2 {
-    color: #77A36C;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Cards */
+.card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 /* Formulários */
 form {
-    margin-bottom: 20px;
+    display: grid;
+    gap: 15px;
 }
 
 label {
-    display: block;
-    margin-top: 10px;
+    font-weight: bold;
 }
 
 input, select {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
+    padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 3px;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 /* Botões */
 button {
-    background-color: #77A36C;
-    color: #fff;
-    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #5b8054;
+    background-color: var(--secondary-color);
 }
 
 /* Lista de itens do pedido */
 #orderList {
     list-style-type: none;
-    padding: 0;
 }
 
 #orderList li {
     background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 3px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Total do pedido */
 #totalAmount {
     font-weight: bold;
-    margin-top: 10px;
+    font-size: 18px;
+    margin-top: 15px;
+    text-align: right;
 }
 
 /* Mensagens de erro */
 .error-message {
-    color: red;
+    color: #d9534f;
     margin-top: 10px;
+    text-align: center;
 }
 
 /* Número do pedido */
 .order-number {
     font-weight: bold;
-    color: #77A36C;
-    margin-top: 10px;
+    color: var(--primary-color);
+    margin-top: 15px;
+    text-align: center;
+    font-size: 18px;
 }
 
 /* Campos com erro */
 .error {
-    border-color: red;
+    border-color: #d9534f;
+}
+
+/* Menu de preços */
+.price-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.price-item {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.price-item:hover {
+    transform: translateY(-5px);
+}
+
+.price-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.price-item .price {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.price-item .description {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 30px;
+    color: #666;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    .price-menu {
+        grid-template-columns: 1fr;
+    }
 }
