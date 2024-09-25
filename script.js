@@ -91,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const orderData = [date, name, nif, phone, totalAmount.toFixed(2)];
         
-        // Envia dados para o Google Apps Script
         fetch('https://script.google.com/macros/s/AKfycbx9_UlHgrW7COti42YIFLtDOW-2vhdObVoWpGtEtXyqx4hSDsaoYLSQ75a0RZxADgk/exec', {
             method: 'POST',
             mode: 'no-cors',
@@ -112,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
             totalAmount = 0;
             updateTotalAmount();
             clearErrorMessage();
-            // Redefine a data para a data atual após o reset do formulário
             dateInput.value = formatDate(new Date());
         })
         .catch(error => {
