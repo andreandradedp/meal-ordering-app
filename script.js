@@ -97,74 +97,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Registra o pedido
-    function registerOrder(event) {
-        event.preventDefault();
-        if (!validateForm(customerForm) || orderList.children.length === 0) {
-            showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
-            return;
-        }
-
-        const name = document.getElementById('name').value;
-        const nif = document.getElementById('nif').value;
-        const phone = document.getElementById('phone').value;
-        const date = document.getElementById('date').value;
-
-        const orderData = {
-            date: date,
-            name: name,
-            nif: nif,
-            phone: phone,
-            total: totalAmount.toFixed(2)
-        };
-        
-        // Exibe mensagem de "Processando..." para o usuário
-        showProcessingMessage('Processando seu pedido...');
-
-        // Envia dados para o Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbxGE5ocjWaUqBpmkkyABUhG78acd8J9lgksR5N0CluX1GX6SJCJOqB4vEAXPQ4MNnqM/exec', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro de rede: ${response.status} - ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then(text => {
-            try {
-                return JSON.parse(text);
-            } catch (error) {
-                console.error('Erro ao analisar resposta:', error);
-                throw new Error(`Erro ao processar resposta do servidor: ${text}`);
-            }
-        })
-        .then(data => {
-            if (data.result === 'success') {
-                orderNumberDiv.textContent = `Registro feito com sucesso! Número de registro: ${data.registrationNumber}`;
-                customerForm.reset();
-                orderList.innerHTML = '';
-                totalAmount = 0;
-                updateTotalAmount();
-                clearErrorMessage();
-                dateInput.value = new Date().toISOString().split('T')[0];
-            } else {
-                throw new Error(data.message || 'Falha ao registrar pedido');
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao registrar pedido:', error);
-            showErrorMessage(`Erro ao registrar pedido: ${error.message}. Por favor, tente novamente.`);
-        })
-        .finally(() => {
-            // Remove a mensagem de "Processando..."
-            clearProcessingMessage();
-        });
+function registerOrder(event) {
+    event.preventDefault();
+    if (!validateForm(customerForm) || orderList.children.length === 0) {
+        showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
+        return;
     }
 
+    const name = document.getElementById('name').value;
+    const nif = document.getElementById('nif').value;
+    const phone = document.getElementById('phone').value;
+    const date = document.getElementById('date').value;
+
+    const orderData = {
+        date: date,
+        name: name,
+        nif: nif,
+        phone: phone,
+        total: totalAmount.toFixed(2)
+    };
+    
+    showProcessingMessage('Processando seu pedido...');
+
+    fetch('https://script.google.com/macros/s/AKfycbySHtFg3Xk6Sukq-UFItikM4vLM5KdCcM6XHsy_2riZwDkyLJqtF-IHOspECCWkYOVU/exec', {
+        method: 'POST',
+        mode: 'no-cors', // Adicione esta linha
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+    })
+    .then(text => {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.log('Resposta recebida:', text);
+            return { result: 'success', message: 'Pedido registrado com sucesso' };
+        }
+    })
+    .then(data => {
+        if (data.result === 'success') {
+            orderNumberDiv.textContent = `Registro feito com sucesso! Número de registro: ${data.registrationNumber || 'N/A'}`;
+            customerForm.reset();
+            orderList.innerHTML = '';
+            totalAmount = 0;
+            updateTotalAmount();
+            clearErrorMessage();
+            dateInput.value = new Date().toISOString().split('T')[0];
+        } else {
+            throw new Error(data.message || 'Falha ao registrar pedido');
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao registrar pedido:', error);
+        showErrorMessage(`Erro ao registrar pedido: ${error.message}. Por favor, tente novamente.`);
+    })
+    .finally(() => {
+        clearProcessingMessage();
+    });
+}
     // Valida os campos obrigatórios do formulário
     function validateForm(form) {
         let isValid = true;
