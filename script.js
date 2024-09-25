@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showProcessingMessage('Processando seu pedido...');
 
         // Envia dados para o Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbwEUCn0EMw5hjYUZnxfE7hhLH5VmskMez3YbfvEya4/dev', {
+        fetch('https://script.google.com/macros/s/AKfycbxGE5ocjWaUqBpmkkyABUhG78acd8J9lgksR5N0CluX1GX6SJCJOqB4vEAXPQ4MNnqM/exec', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
