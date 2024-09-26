@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Variável para controle do total
     let totalAmount = 0;
+    // Array para armazenar os itens do pedido
+    let orderItems = [];
 
     // Função para formatar a data como YYYY-MM-DD (formato aceito pelo input type="date")
     function formatDate(date) {
@@ -54,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = itemSelect.value;
         const quantity = parseInt(quantityInput.value);
         const price = parseFloat(priceInput.value);
+
+        // Adiciona o item ao array de itens do pedido
+        orderItems.push(`${item} - ${quantity} x ${price.toFixed(2)}€`);
 
         // Cria um novo item na lista de pedidos
         const listItem = document.createElement('li');
@@ -89,7 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const phone = document.getElementById('phone').value;
         const date = document.getElementById('date').value;
 
-        const orderData = [date, name, nif, phone, totalAmount.toFixed(2)];
+        const orderData = {
+            date: date,
+            name: name,
+            nif: nif,
+            phone: phone,
+            items: orderItems.join('; '),
+            totalAmount: totalAmount.toFixed(2)
+        };
         
         fetch('https://script.google.com/macros/s/AKfycbw6XN2KwLfdc0Ff1gSE7-zfPHyWURHgYMSfbLdpfhBS6jJyzggOIffbpyCzLKqU8yTVNQ/exec', {
             method: 'POST',
@@ -97,17 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
-                orderData: orderData,
-                date: date,
-                nif: nif,
-                phone: phone
-            }),
+            body: JSON.stringify(orderData),
         })
         .then(() => {
             orderNumberDiv.textContent = `Registro feito com sucesso! O número de registro será gerado no servidor.`;
             customerForm.reset();
             orderList.innerHTML = '';
+            orderItems = [];
             totalAmount = 0;
             updateTotalAmount();
             clearErrorMessage();
