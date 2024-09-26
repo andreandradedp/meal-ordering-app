@@ -102,29 +102,38 @@ document.addEventListener('DOMContentLoaded', () => {
             items: orderItems.join('; '),
             totalAmount: totalAmount.toFixed(2)
         };
+        fetch('https://script.google.com/macros/s/AKfycbwwJuc2gYNhdFQBYNVv3TMkBE3AEshQeyS5X5I0Gi9uyTkQUapqV7GFvqFOtZVW6OQEDA/exec', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(orderData),
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Erro na resposta do servidor');
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.status === 'success') {
+        orderNumberDiv.textContent = `Registro feito com sucesso! ${data.message}`;
+        customerForm.reset();
+        orderList.innerHTML = '';
+        orderItems = [];
+        totalAmount = 0;
+        updateTotalAmount();
+        clearErrorMessage();
+        dateInput.value = formatDate(new Date());
+    } else {
+        throw new Error(data.message || 'Erro desconhecido ao registrar pedido');
+    }
+})
+.catch(error => {
+    console.error('Erro ao registrar pedido:', error);
+    showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente.');
+});
         
-        fetch('https://script.google.com/macros/s/AKfycbw0-8Ru4yvg3QhLb-RoJnJ62XrVqpr6dXVS-XtRi8v6Btser1zIfMR8BdIZdP0AjqDUJw/exec', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
-        })
-        .then(() => {
-            orderNumberDiv.textContent = `Registro feito com sucesso! O número de registro será gerado no servidor.`;
-            customerForm.reset();
-            orderList.innerHTML = '';
-            orderItems = [];
-            totalAmount = 0;
-            updateTotalAmount();
-            clearErrorMessage();
-            dateInput.value = formatDate(new Date());
-        })
-        .catch(error => {
-            console.error('Erro ao registrar pedido:', error);
-            showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente.');
-        });
     }
 
     // Valida os campos obrigatórios do formulário
