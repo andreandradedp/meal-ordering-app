@@ -119,7 +119,7 @@ function registerOrder(event) {
     
     showProcessingMessage('Processando seu pedido...');
 
-    fetch('https://script.google.com/macros/s/AKfycbySHtFg3Xk6Sukq-UFItikM4vLM5KdCcM6XHsy_2riZwDkyLJqtF-IHOspECCWkYOVU/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbxpsK1Obkwlw2_AODEB8yqTBEKVd4oAEOqdsdHX4DAVqcG9nWtmY2OoaJ3-6P35RWDn/exec', {
         method: 'POST',
         mode: 'no-cors', // Adicione esta linha
         headers: {
