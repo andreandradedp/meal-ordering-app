@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const orderData = [date, name, nif, phone, totalAmount.toFixed(2)];
         
-        fetch('URL_DO_SEU_GOOGLE_APPS_SCRIPT', {
+        fetch('https://script.google.com/macros/s/AKfycbw6XN2KwLfdc0Ff1gSE7-zfPHyWURHgYMSfbLdpfhBS6jJyzggOIffbpyCzLKqU8yTVNQ/exec', {
             method: 'POST',
             mode: 'no-cors',
             headers: {
