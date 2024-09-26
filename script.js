@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalAmount: totalAmount.toFixed(2)
         };
         
-        fetch('https://script.google.com/macros/s/AKfycbw_Dpsd7k5IwQa3fxfZ5wL8K-V-bPUTnHkKKpEzvdvehTQGmUkFJ_ChOPUCqRkRxKURcA/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbzZwu8NbhhmAXMV7DbRnG45ongzLR0RjXlg8qNhjhMW4XnR8hYN4qdUDv7ujLtNgpwd/exec', {
             method: 'POST',
             mode: 'no-cors',
             headers: {
