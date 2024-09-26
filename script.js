@@ -19,43 +19,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const customerForm = document.getElementById('customerForm');
     const orderNumberDiv = document.getElementById('orderNumber');
     const errorMessageDiv = document.getElementById('errorMessage');
-    const nifInput = document.getElementById('nif');
-    const phoneInput = document.getElementById('phone');
-    const dateInput = document.getElementById('date');
 
     // Variável para controle do total
     let totalAmount = 0;
 
+    // Função para formatar a data como YYYY-MM-DD (formato aceito pelo input type="date")
+    function formatDate(date) {
+        return date.toISOString().split('T')[0];
+    }
+
     // Preenche o campo de data com a data atual
-    dateInput.value = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('date');
+    dateInput.value = formatDate(new Date());
 
     // Adiciona event listeners aos elementos
     itemSelect.addEventListener('change', updatePrice);
     addItemButton.addEventListener('click', addItemToOrder);
     customerForm.addEventListener('submit', registerOrder);
-
-    // Validação do NIF
-    nifInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
-        if (this.value.length === 9 && !isValidNIF(this.value)) {
-            this.setCustomValidity('NIF inválido');
-        } else {
-            this.setCustomValidity('');
-        }
-    });
-
-    // Validação do telefone
-    phoneInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
-    });
-
-    // Função para validar NIF
-    function isValidNIF(nif) {
-        if (nif.length !== 9 || /^(\d)\1{8}$/.test(nif) || nif === '123456789') {
-            return false;
-        }
-        return true;
-    }
 
     // Atualiza o preço quando um item é selecionado
     function updatePrice() {
@@ -97,71 +77,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Registra o pedido
-function registerOrder(event) {
-    event.preventDefault();
-    if (!validateForm(customerForm) || orderList.children.length === 0) {
-        showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
-        return;
-    }
-
-    const name = document.getElementById('name').value;
-    const nif = document.getElementById('nif').value;
-    const phone = document.getElementById('phone').value;
-    const date = document.getElementById('date').value;
-
-    const orderData = {
-        date: date,
-        name: name,
-        nif: nif,
-        phone: phone,
-        total: totalAmount.toFixed(2)
-    };
-    
-    showProcessingMessage('Processando seu pedido...');
-
-    fetch('https://script.google.com/macros/s/AKfycbxpsK1Obkwlw2_AODEB8yqTBEKVd4oAEOqdsdHX4DAVqcG9nWtmY2OoaJ3-6P35RWDn/exec', {
-        method: 'POST',
-        mode: 'no-cors', // Adicione esta linha
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    function registerOrder(event) {
+        event.preventDefault();
+        if (!validateForm(customerForm) || orderList.children.length === 0) {
+            showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
+            return;
         }
-        return response.text();
-    })
-    .then(text => {
-        try {
-            return JSON.parse(text);
-        } catch (e) {
-            console.log('Resposta recebida:', text);
-            return { result: 'success', message: 'Pedido registrado com sucesso' };
-        }
-    })
-    .then(data => {
-        if (data.result === 'success') {
-            orderNumberDiv.textContent = `Registro feito com sucesso! Número de registro: ${data.registrationNumber || 'N/A'}`;
+
+        const name = document.getElementById('name').value;
+        const nif = document.getElementById('nif').value;
+        const phone = document.getElementById('phone').value;
+        const date = document.getElementById('date').value;
+
+        const orderData = [date, name, nif, phone, totalAmount.toFixed(2)];
+        
+        fetch('URL_DO_SEU_GOOGLE_APPS_SCRIPT', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                orderData: orderData,
+                date: date,
+                nif: nif,
+                phone: phone
+            }),
+        })
+        .then(() => {
+            orderNumberDiv.textContent = `Registro feito com sucesso! O número de registro será gerado no servidor.`;
             customerForm.reset();
             orderList.innerHTML = '';
             totalAmount = 0;
             updateTotalAmount();
             clearErrorMessage();
-            dateInput.value = new Date().toISOString().split('T')[0];
-        } else {
-            throw new Error(data.message || 'Falha ao registrar pedido');
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao registrar pedido:', error);
-        showErrorMessage(`Erro ao registrar pedido: ${error.message}. Por favor, tente novamente.`);
-    })
-    .finally(() => {
-        clearProcessingMessage();
-    });
-}
+            dateInput.value = formatDate(new Date());
+        })
+        .catch(error => {
+            console.error('Erro ao registrar pedido:', error);
+            showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente.');
+        });
+    }
+
     // Valida os campos obrigatórios do formulário
     function validateForm(form) {
         let isValid = true;
@@ -179,24 +136,10 @@ function registerOrder(event) {
     // Exibe uma mensagem de erro
     function showErrorMessage(message) {
         errorMessageDiv.textContent = message;
-        errorMessageDiv.style.color = 'red';
     }
 
-    // Exibe uma mensagem de processamento
-    function showProcessingMessage(message) {
-        errorMessageDiv.textContent = message;
-        errorMessageDiv.style.color = 'blue';
-    }
-
-    // Limpa a mensagem de erro ou processamento
+    // Limpa a mensagem de erro
     function clearErrorMessage() {
         errorMessageDiv.textContent = '';
-    }
-
-    // Limpa especificamente a mensagem de processamento
-    function clearProcessingMessage() {
-        if (errorMessageDiv.style.color === 'blue') {
-            errorMessageDiv.textContent = '';
-        }
     }
 });
