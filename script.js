@@ -98,7 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
             totalAmount: totalAmount.toFixed(2),
             message: document.getElementById('message').value
         };
-        
+
+
+        //TESTE SE O SCRIPT ESTÁ REALMENTE SENDO CHAMADO
+        console.log("Enviando pedido...");
         // Envia o pedido para o servidor
         fetch('https://script.google.com/macros/s/AKfycbxjuhMxpOX32Sgmdys0LBsmdeSEFs4tqwk7Ibj06NjqNCEwMDueN1w_3JFwalVrcErF9g/exec', {
             method: 'POST',
@@ -109,6 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify(orderData),
         })
         .then(response => {
+            //TESTE SE O SCRIPT ESTÁ REALMENTE SENDO CHAMADO
+            console.log("Resposta recebida:", response);
             if (response.type === 'opaque') {
                 // Com 'no-cors', não podemos acessar o conteúdo da resposta
                 // Assumimos que foi bem-sucedido se chegamos aqui
