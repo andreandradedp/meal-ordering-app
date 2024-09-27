@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message: message
         };
         
-        fetch('https://script.google.com/macros/s/AKfycbwaI_yVJf0kcemkuovr6ECyUwb56PmoLdPMlsYk4ZiIUrALzEs4KrLT21cdLeujXEGq8w/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbzwtE5Em4q1LQDW0ORL603Vcyxc5qwISUXJzJk97qyFiMCH1PETBScftJxVxil3KPovOA/exec', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
