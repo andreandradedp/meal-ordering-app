@@ -105,8 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
             message: message
         };
         
-        fetch('https://script.google.com/macros/s/AKfycbzwtE5Em4q1LQDW0ORL603Vcyxc5qwISUXJzJk97qyFiMCH1PETBScftJxVxil3KPovOA/exec', {
+        // Envia o pedido para o servidor
+        fetch('https://script.google.com/macros/s/AKfycby5OnqFJK-5pyvv2Gy2IN8PmRV4bjdvCNlk-W4fP6QWWf-2e7ez224BX-OFc5UQcMZ0sw/exec', {
             method: 'POST',
+            mode: 'cors', // Habilita o modo CORS
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -114,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Erro na resposta do servidor');
+                throw new Error('Erro na resposta do servidor: ' + response.status);
             }
             return response.json();
         })
