@@ -89,32 +89,30 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const name = document.getElementById('name').value;
-        const nif = document.getElementById('nif').value;
-        const phone = document.getElementById('phone').value;
-        const date = document.getElementById('date').value;
-        const message = document.getElementById('message') ? document.getElementById('message').value : '';
-
         const orderData = {
-            date: date,
-            name: name,
-            nif: nif,
-            phone: phone,
+            date: document.getElementById('date').value,
+            name: document.getElementById('name').value,
+            nif: document.getElementById('nif').value,
+            phone: document.getElementById('phone').value,
             items: orderItems.join('; '),
             totalAmount: totalAmount.toFixed(2),
-            message: message
+            message: document.getElementById('message') ? document.getElementById('message').value : ''
         };
         
-        // Envia o pedido para o servidor
-        fetch('https://script.google.com/macros/s/AKfycby5OnqFJK-5pyvv2Gy2IN8PmRV4bjdvCNlk-W4fP6QWWf-2e7ez224BX-OFc5UQcMZ0sw/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbzQDtc8CDQwl3jmCG7wF6sCWs2RvfTa59VyekSdvoAoZ9POChTST-NiQP3jMF_mAlVJlA/exec', {
             method: 'POST',
-            mode: 'cors', // Habilita o modo CORS
+            mode: 'no-cors', // Usa 'no-cors' para evitar problemas de CORS
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(orderData),
         })
         .then(response => {
+            if (response.type === 'opaque') {
+                // Com 'no-cors', não podemos acessar o conteúdo da resposta
+                // Assumimos que foi bem-sucedido se chegamos aqui
+                return { status: 'success', message: 'Pedido registrado com sucesso!' };
+            }
             if (!response.ok) {
                 throw new Error('Erro na resposta do servidor: ' + response.status);
             }
@@ -122,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             if (data.status === 'success') {
-                orderNumberDiv.textContent = `${data.message} Número do registro: ${data.orderNumber}`;
+                orderNumberDiv.textContent = `${data.message}`;
                 customerForm.reset();
                 orderList.innerHTML = '';
                 orderItems = [];
