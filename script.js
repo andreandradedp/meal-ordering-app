@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         // Envia o pedido para o servidor
-        fetch('https://script.google.com/macros/s/AKfycbz--a5kQcx_s6XXKzUD6z8KslT26lnudTWRJ5eEgWuWptX6srzisu-NRQtZKg-_tpMjZQ/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbxjuhMxpOX32Sgmdys0LBsmdeSEFs4tqwk7Ibj06NjqNCEwMDueN1w_3JFwalVrcErF9g/exec', {
             method: 'POST',
             mode: 'no-cors', // Usa 'no-cors' para evitar problemas de CORS
             headers: {
