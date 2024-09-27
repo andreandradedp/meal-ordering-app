@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Adiciona event listeners aos elementos
     itemSelect.addEventListener('change', updatePrice);
-    addItemButton.addEventListener('click', addItemToOrder);
+    orderForm.addEventListener('submit', addItemToOrder);
     customerForm.addEventListener('submit', registerOrder);
 
     // Atualiza o preço quando um item é selecionado
@@ -96,9 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
             phone: document.getElementById('phone').value,
             items: orderItems.join('; '),
             totalAmount: totalAmount.toFixed(2),
-            message: document.getElementById('message') ? document.getElementById('message').value : ''
+            message: document.getElementById('message').value
         };
         
+        // Envia o pedido para o servidor
         fetch('https://script.google.com/macros/s/AKfycbzQDtc8CDQwl3jmCG7wF6sCWs2RvfTa59VyekSdvoAoZ9POChTST-NiQP3jMF_mAlVJlA/exec', {
             method: 'POST',
             mode: 'no-cors', // Usa 'no-cors' para evitar problemas de CORS
