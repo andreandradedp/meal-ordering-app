@@ -89,6 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Obtém o local selecionado
+        const localSelecionado = document.querySelector('input[name="local"]:checked').value;
+
         const orderData = {
             date: document.getElementById('date').value,
             name: document.getElementById('name').value,
@@ -96,24 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
             phone: document.getElementById('phone').value,
             items: orderItems.join('; '),
             totalAmount: totalAmount.toFixed(2),
-            message: document.getElementById('message').value
+            message: document.getElementById('message').value,
+            local: localSelecionado // Adiciona o local ao objeto de dados
         };
 
-
-        //TESTE SE O SCRIPT ESTÁ REALMENTE SENDO CHAMADO
-        console.log("Enviando pedido...");
         // Envia o pedido para o servidor
         fetch('https://script.google.com/macros/s/AKfycby3stxP2ndHgA-XNgyhjlQSN-axoFtGqdGEUaay6eTEGue6XRedlK7GArpyNc8FoNpdwA/exec', {
             method: 'POST',
-            mode: 'no-cors', // Usa 'no-cors' para evitar problemas de CORS
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(orderData),
         })
         .then(response => {
-            //TESTE SE O SCRIPT ESTÁ REALMENTE SENDO CHAMADO
-            console.log("Resposta recebida:", response);
             if (response.type === 'opaque') {
                 // Com 'no-cors', não podemos acessar o conteúdo da resposta
                 // Assumimos que foi bem-sucedido se chegamos aqui
@@ -126,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             if (data.status === 'success') {
-                orderNumberDiv.textContent = `${data.message}`;
+                orderNumberDiv.textContent = `${data.message} Número do pedido: ${data.orderNumber}`;
                 customerForm.reset();
                 orderList.innerHTML = '';
                 orderItems = [];
