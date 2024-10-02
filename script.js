@@ -115,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => {
             if (response.type === 'opaque') {
                 // Com 'no-cors', não podemos acessar o conteúdo da resposta
-                // Assumimos que foi bem-sucedido se chegamos aqui
-                return { status: 'success', message: 'Pedido registrado com sucesso!' };
+                // Retornamos uma mensagem de sucesso simples
+                return { status: 'success', message: 'Pedido registado com sucesso!' };
             }
             if (!response.ok) {
                 throw new Error('Erro na resposta do servidor: ' + response.status);
@@ -125,7 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             if (data.status === 'success') {
-                orderNumberDiv.textContent = `${data.message} Número do pedido: ${data.orderNumber}`;
+                // Exibe a mensagem de sucesso simplificada
+                orderNumberDiv.textContent = data.message;
                 customerForm.reset();
                 orderList.innerHTML = '';
                 orderItems = [];
