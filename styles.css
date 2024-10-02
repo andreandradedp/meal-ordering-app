@@ -6,13 +6,11 @@
     --text-color: #333;
     --card-background: #fff;
 }
-
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
@@ -20,20 +18,17 @@ body {
     background-color: var(--background-color);
     padding: 20px;
 }
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
-
 /* Cabeçalhos */
 h1, h2 {
     color: var(--primary-color);
     margin-bottom: 20px;
     text-align: center;
 }
-
 /* Cards */
 .card {
     background-color: var(--card-background);
@@ -42,25 +37,21 @@ h1, h2 {
     padding: 20px;
     margin-bottom: 20px;
 }
-
 /* Formulários */
 form {
     display: grid;
     gap: 15px;
 }
-
 label {
     font-weight: bold;
 }
-
-input, select {
+input, select, textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
 }
-
 /* Botões */
 button {
     background-color: var(--primary-color);
@@ -72,16 +63,13 @@ button {
     font-size: 16px;
     transition: background-color 0.3s ease;
 }
-
 button:hover {
     background-color: var(--secondary-color);
 }
-
 /* Lista de itens do pedido */
 #orderList {
     list-style-type: none;
 }
-
 #orderList li {
     background-color: #f9f9f9;
     padding: 15px;
@@ -89,7 +77,6 @@ button:hover {
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 /* Total do pedido */
 #totalAmount {
     font-weight: bold;
@@ -97,14 +84,12 @@ button:hover {
     margin-top: 15px;
     text-align: right;
 }
-
 /* Mensagens de erro */
 .error-message {
     color: #d9534f;
     margin-top: 10px;
     text-align: center;
 }
-
 /* Número do pedido */
 .order-number {
     font-weight: bold;
@@ -113,12 +98,10 @@ button:hover {
     text-align: center;
     font-size: 18px;
 }
-
 /* Campos com erro */
 .error {
     border-color: #d9534f;
 }
-
 /* Menu de preços */
 .price-menu {
     display: grid;
@@ -126,7 +109,6 @@ button:hover {
     gap: 20px;
     margin-bottom: 30px;
 }
-
 .price-item {
     background-color: var(--card-background);
     border-radius: 8px;
@@ -135,27 +117,22 @@ button:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
-
 .price-item:hover {
     transform: translateY(-5px);
 }
-
 .price-item h3 {
     color: var(--primary-color);
     margin-bottom: 10px;
 }
-
 .price-item .price {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
 }
-
 .price-item .description {
     font-size: 14px;
     color: #666;
 }
-
 /* Footer */
 footer {
     text-align: center;
@@ -163,18 +140,47 @@ footer {
     margin-top: 30px;
     color: #666;
 }
-
+/* Novo estilo para o container flexível */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.flex-item {
+    flex: 1;
+    margin-right: 10px;
+}
+.flex-item:last-child {
+    margin-right: 0;
+}
+/* Estilo para o grupo de radio buttons */
+.radio-group {
+    display: flex;
+    align-items: center;
+}
+.radio-group input[type="radio"] {
+    width: auto;
+    margin-right: 5px;
+}
+.radio-group label {
+    margin-right: 15px;
+}
 /* Responsividade */
 @media (max-width: 768px) {
     .container {
         padding: 10px;
     }
-
     form {
         grid-template-columns: 1fr;
     }
-
     .price-menu {
         grid-template-columns: 1fr;
+    }
+    .flex-container {
+        flex-direction: column;
+    }
+    .flex-item {
+        margin-right: 0;
+        margin-bottom: 10px;
     }
 }
