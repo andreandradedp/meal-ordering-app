@@ -68,9 +68,20 @@
                     <label for="date">Data:</label>
                     <input type="date" id="date" required>
                 </div>
-                <div>
-                    <label for="message">Mensagem (opcional):</label>
-                    <textarea id="message"></textarea>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <label for="message">Mensagem (opcional):</label>
+                        <textarea id="message"></textarea>
+                    </div>
+                    <div class="flex-item">
+                        <label>Local:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="carcavelos" name="local" value="Carcavelos" required>
+                            <label for="carcavelos">Carcavelos</label>
+                            <input type="radio" id="parede" name="local" value="Parede" required>
+                            <label for="parede">Parede</label>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" id="registerOrder">Registrar Pedido</button>
             </form>
@@ -80,12 +91,10 @@
         <div id="errorMessage" class="error-message"></div>
         <div id="orderNumber" class="order-number"></div>
     </div>
-
     <!-- Rodapé -->
     <footer>
         Desenvolvido com 🧡 por @andre_depaula 💻.
     </footer>
-
     <script src="script.js"></script>
 </body>
 </html>
