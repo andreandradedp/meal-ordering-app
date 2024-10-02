@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //TESTE SE O SCRIPT ESTÁ REALMENTE SENDO CHAMADO
         console.log("Enviando pedido...");
         // Envia o pedido para o servidor
-        fetch('https://script.google.com/macros/s/AKfycbw0aSEZ1fj6aDL67fNA3Lr_BCErW9eYq0Ja1rcWPDB1mhw6JOaT1U_7ihNUS1A8ECUDcg/exec', {
+        fetch('https://script.google.com/macros/s/AKfycby3stxP2ndHgA-XNgyhjlQSN-axoFtGqdGEUaay6eTEGue6XRedlK7GArpyNc8FoNpdwA/exec', {
             method: 'POST',
             mode: 'no-cors', // Usa 'no-cors' para evitar problemas de CORS
             headers: {
