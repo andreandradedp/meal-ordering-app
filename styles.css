@@ -165,6 +165,20 @@ footer {
 .radio-group label {
     margin-right: 15px;
 }
+/*Estilo para o grupo que trata do consentimento do tratamento dos dados*/
+.privacy-consent {
+  margin-top: 15px;
+}
+
+.privacy-policy-link {
+  margin-left: 10px;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.privacy-policy-link:hover {
+  text-decoration: underline;
+}
 /* Responsividade */
 @media (max-width: 768px) {
     .container {
