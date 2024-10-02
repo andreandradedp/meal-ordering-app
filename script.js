@@ -80,15 +80,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTotalAmount() {
         totalAmountDiv.textContent = `Total: ${totalAmount.toFixed(2)}€`;
     }
-
+    
+    // Tratamento de dados
+    function validateConsent() {
+  const consentimento = document.querySelector('input[name="consentimento"]:checked');
+  if (!consentimento || consentimento.value === 'nao-autorizo') {
+    showErrorMessage('Para prosseguir com o pedido, é necessário autorizar o tratamento dos dados.');
+    return false;
+  }
+  return true;
+}
     // Registra o pedido
     function registerOrder(event) {
-        event.preventDefault();
-        if (!validateForm(customerForm) || orderList.children.length === 0) {
-            showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
-            return;
-        }
-
+  event.preventDefault();
+  if (!validateForm(customerForm) || orderList.children.length === 0 || !validateConsent()) {
+      showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
+    return;
+  }
         // Obtém o local selecionado
         const localSelecionado = document.querySelector('input[name="local"]:checked').value;
 
