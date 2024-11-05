@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nif: document.getElementById('nif').value,
             phone: document.getElementById('phone').value,
             items: orderItems.join('; '),
-            totalAmount: totalAmount.toFixed(2),
+            totalAmount: totalAmount.toFixed(2).replace(".", ","),
             message: document.getElementById('message').value,
             local: localSelecionado // Adiciona o local ao objeto de dados
         };
