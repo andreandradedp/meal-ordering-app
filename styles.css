@@ -133,6 +133,22 @@ button:hover {
     font-size: 14px;
     color: #666;
 }
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--primary-color); /* Use sua cor primária */
+  animation: spin 1s linear infinite;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Footer */
 footer {
     text-align: center;
