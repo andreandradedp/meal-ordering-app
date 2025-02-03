@@ -95,10 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Registra o pedido
     function registerOrder(event) {
         event.preventDefault();
+
+        // Validação dos campos obrigatórios e do consentimento
         if (!validateForm(customerForm) || orderList.children.length === 0 || !validateConsent()) {
-            showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
+            showErrorMessage('Por favor, preencha todos os campos obrigatórios, adicione pelo menos um item ao pedido e autorize o tratamento de dados.');
             return;
         }
+
+        // Chama a função para validar NIF e Telefone
+        if (!validateSequentialNumbers(document.getElementById('nif')) || 
+            !validateSequentialNumbers(document.getElementById('phone'))) {
+            showErrorMessage('NIF ou Telefone inválidos.');
+            return;
+        }
+
         // Obtém o local selecionado
         const localSelecionado = document.querySelector('input[name="local"]:checked').value;
 
@@ -115,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Desabilita o botão e exibe um spinner
         registerOrderButton.disabled = true;
-        registerOrderButton.innerHTML = '<span class="spinner"></span> A Registar...';
+        registerOrderButton.innerHTML = '<span class="spinner"></span> Registrando...';
 
         // Envia o pedido para o servidor
         fetch('https://script.google.com/macros/s/AKfycbwQLwJWq8LrcWUz_CsPgJQZMWHtmi305p7MbDpsrA822OlZ4M8Ati3zLvmViTSfi0Gn/exec', {
@@ -175,6 +185,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         return isValid;
+    }
+
+    // Função para validar números sequenciais
+    function validateSequentialNumbers(input) {
+        const value = input.value;
+        if (/^(0{9}|123456789)$/.test(value)) {
+            return false;
+        }
+        // Verifica se são números sequenciais
+        const sequence = value.split('').map(Number);
+        for (let i = 1; i < sequence.length; i++) {
+            if (sequence[i] !== sequence[i - 1] + 1 && sequence[i] !== sequence[i - 1] - 1) {
+                return true; // Não é sequencial
+            }
+        }
+        return false; // É sequencial
     }
 
     // Exibe uma mensagem de erro
