@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const customerForm = document.getElementById('customerForm');
     const orderNumberDiv = document.getElementById('orderNumber');
     const errorMessageDiv = document.getElementById('errorMessage');
+    const registerOrderButton = document.getElementById('registerOrder'); // Seleciona o botão
 
     // Variável para controle do total
     let totalAmount = 0;
@@ -80,23 +81,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTotalAmount() {
         totalAmountDiv.textContent = `Total: ${totalAmount.toFixed(2)}€`;
     }
-    
+
     // Tratamento de dados
     function validateConsent() {
-  const consentimento = document.querySelector('input[name="consentimento"]:checked');
-  if (!consentimento || consentimento.value === 'nao-autorizo') {
-    showErrorMessage('Para prosseguir com o pedido, é necessário autorizar o tratamento dos dados.');
-    return false;
-  }
-  return true;
-}
+        const consentimento = document.querySelector('input[name="consentimento"]:checked');
+        if (!consentimento || consentimento.value === 'nao-autorizo') {
+            showErrorMessage('Para prosseguir com o pedido, é necessário autorizar o tratamento dos dados.');
+            return false;
+        }
+        return true;
+    }
+
     // Registra o pedido
     function registerOrder(event) {
-  event.preventDefault();
-  if (!validateForm(customerForm) || orderList.children.length === 0 || !validateConsent()) {
-      showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
-    return;
-  }
+        event.preventDefault();
+        if (!validateForm(customerForm) || orderList.children.length === 0 || !validateConsent()) {
+            showErrorMessage('Por favor, preencha todos os campos obrigatórios e adicione pelo menos um item ao pedido.');
+            return;
+        }
         // Obtém o local selecionado
         const localSelecionado = document.querySelector('input[name="local"]:checked').value;
 
@@ -111,45 +113,54 @@ document.addEventListener('DOMContentLoaded', () => {
             local: localSelecionado // Adiciona o local ao objeto de dados
         };
 
+        // Desabilita o botão e exibe um spinner
+        registerOrderButton.disabled = true;
+        registerOrderButton.innerHTML = '<span class="spinner"></span> A Registar...';
+
         // Envia o pedido para o servidor
         fetch('https://script.google.com/macros/s/AKfycbwQLwJWq8LrcWUz_CsPgJQZMWHtmi305p7MbDpsrA822OlZ4M8Ati3zLvmViTSfi0Gn/exec', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
-        })
-        .then(response => {
-            if (response.type === 'opaque') {
-                // Com 'no-cors', não podemos acessar o conteúdo da resposta
-                // Retornamos uma mensagem de sucesso simples
-                return { status: 'success', message: 'Pedido registado com sucesso!' };
-            }
-            if (!response.ok) {
-                throw new Error('Erro na resposta do servidor: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                // Exibe a mensagem de sucesso simplificada
-                orderNumberDiv.textContent = data.message;
-                customerForm.reset();
-                orderList.innerHTML = '';
-                orderItems = [];
-                totalAmount = 0;
-                updateTotalAmount();
-                clearErrorMessage();
-                dateInput.value = formatDate(new Date());
-            } else {
-                throw new Error(data.message || 'Erro desconhecido ao registrar pedido');
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao registrar pedido:', error);
-            showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente. Detalhes: ' + error.message);
-        });
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData),
+            })
+            .then(response => {
+                if (response.type === 'opaque') {
+                    // Com 'no-cors', não podemos acessar o conteúdo da resposta
+                    // Retornamos uma mensagem de sucesso simples
+                    return {status: 'success', message: 'Pedido registado com sucesso!'};
+                }
+                if (!response.ok) {
+                    throw new Error('Erro na resposta do servidor: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    // Exibe a mensagem de sucesso simplificada
+                    orderNumberDiv.textContent = data.message;
+                    customerForm.reset();
+                    orderList.innerHTML = '';
+                    orderItems = [];
+                    totalAmount = 0;
+                    updateTotalAmount();
+                    clearErrorMessage();
+                    dateInput.value = formatDate(new Date());
+                } else {
+                    throw new Error(data.message || 'Erro desconhecido ao registrar pedido');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao registrar pedido:', error);
+                showErrorMessage('Erro ao registrar pedido. Por favor, tente novamente. Detalhes: ' + error.message);
+            })
+            .finally(() => {
+                // Reabilita o botão após o processamento (em caso de sucesso ou erro)
+                registerOrderButton.disabled = false;
+                registerOrderButton.innerHTML = 'Registar Pedido';
+            });
     }
 
     // Valida os campos obrigatórios do formulário
